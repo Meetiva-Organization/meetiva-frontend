@@ -7,26 +7,25 @@ import { Suspense } from "react";
 function CallbackContent() {
     const searchParams = useSearchParams();
     const router = useRouter();
-    const [error, setError] = useState<string | null>(null);
+    const accessToken = searchParams.get("accessToken");
+    const refreshToken = searchParams.get("refreshToken");
+    const hasTokens = accessToken && refreshToken;
 
     useEffect(() => {
-        const accessToken = searchParams.get("accessToken");
-        const refreshToken = searchParams.get("refreshToken");
-
         if (accessToken && refreshToken) {
             localStorage.setItem("accessToken", accessToken);
             localStorage.setItem("refreshToken", refreshToken);
             router.replace("/");
-        } else {
-            setError("Đăng nhập thất bại. Không nhận được token.");
         }
     }, [searchParams, router]);
 
-    if (error) {
+    if (!hasTokens) {
         return (
             <div className="flex min-h-screen items-center justify-center bg-[#0a0a1a] text-white">
                 <div className="text-center">
-                    <p className="mb-4 text-lg font-semibold text-red-400">{error}</p>
+                    <p className="mb-4 text-lg font-semibold text-red-400">
+                        Đăng nhập thất bại. Không nhận được token.
+                    </p>
                     <a href="/login" className="rounded-xl bg-violet-600 px-6 py-3 text-sm font-semibold">
                         Thử lại
                     </a>
