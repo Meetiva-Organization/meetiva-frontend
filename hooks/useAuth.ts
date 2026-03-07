@@ -11,6 +11,7 @@ export function useAuth() {
 
     useEffect(() => {
         const token = localStorage.getItem("accessToken");
+        console.log(token);
         if (!token || isTokenExpired(token)) {
             localStorage.removeItem("accessToken");
             localStorage.removeItem("refreshToken");
